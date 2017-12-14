@@ -1,0 +1,42 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        //用于上传到Jcenter的插件，开源网址：https://github.com/novoda/bintray-release
+        classpath 'com.novoda:bintray-release:0.8.0'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+    //防止中文注释无法识别
+    tasks.withType(Javadoc) {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
+}
+
+ext{
+    compileSdkVersion=26
+    buildToolsVersion='26.0.2'
+    minSdkVersion=15
+    targetSdkVersion=26
+    supportVersion='26.1.0'
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

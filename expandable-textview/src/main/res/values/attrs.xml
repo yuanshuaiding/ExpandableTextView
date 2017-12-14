@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <!--可折叠文本控件属性组声明-->
+    <declare-styleable name="ExpandableTextView">
+        <!--默认展示行数，只能使用整数-->
+        <attr name="lines" format="integer" />
+        <!--展开提示语-->
+        <attr name="expandLabel" format="string"/>
+        <!--收起提示语-->
+        <attr name="collapseLabel" format="string"/>
+        <!--收缩后的图标，只能使用应用图片资源-->
+        <attr name="collapseDrawable" format="reference" />
+        <!--展开后的图标，只能使用应用图片资源-->
+        <attr name="expandDrawable" format="reference" />
+        <attr name="tipsColor" format="color" />
+        <!-- positions属性只能指定<enum>声明的其中之一 -->
+        <attr name="position">
+            <enum name="align_right" value="0" />
+            <enum name="bottom_start" value="1" />
+            <enum name="bottom_center" value="2" />
+            <enum name="bottom_end" value="3" />
+        </attr>
+        <!--自定义文字颜色直接使用系统属性-->
+        <attr name="android:textColor" />
+        <!--自定义文字大小直接使用系统属性-->
+        <attr name="android:textSize" />
+        <!--自定义文字直接使用系统属性-->
+        <attr name="android:text" />
+    </declare-styleable>
+</resources>

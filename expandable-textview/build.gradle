@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 4
+        versionName "1.0.4"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
+}
+
+//配置上传Jcenter参数
+apply plugin: 'com.novoda.bintray-release'
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+publish {
+    userOrg = 'ericding'    //注册时候的用户名
+    groupId = 'com.eric.android.view'//   //compile引用时的第1部分
+    repoName='maven-android'
+    artifactId = 'expandable-textview'////发布到JCenter上的项目名字，compile引用时的第2部分项目名
+    publishVersion = android.defaultConfig.versionName//版本号 ，compile引用时的最后部分，下次更新是只需要更改版本号即可
+    desc = 'An textview container can expand when over limited lines'//描述
+    website = 'https://github.com/yuanshuaiding/MyFunny'  //项目的GitHub网站
+    bintrayUser = properties.getProperty("bintray.user")//读取 local.properties 文件里面的 bintray.user
+    bintrayKey = properties.getProperty("bintray.apikey")//读取 local.properties 文件里面的 bintray.apikey
+    dryRun = false
+}
+//也可以直接运行下面的命令自动编译aar并上传到Jcenter
+//gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxxxxxxxxxx -PdryRun=false
