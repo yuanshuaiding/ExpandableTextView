@@ -3,18 +3,18 @@
     <!--可折叠文本控件属性组声明-->
     <declare-styleable name="ExpandableTextView">
         <!--默认展示行数，只能使用整数-->
-        <attr name="lines" format="integer" />
+        <attr name="collapseLines" format="integer" />
         <!--展开提示语-->
-        <attr name="expandLabel" format="string"/>
+        <attr name="expandTipLabel" format="string"/>
         <!--收起提示语-->
-        <attr name="collapseLabel" format="string"/>
+        <attr name="collapseTipLabel" format="string"/>
         <!--收缩后的图标，只能使用应用图片资源-->
         <attr name="collapseDrawable" format="reference" />
         <!--展开后的图标，只能使用应用图片资源-->
         <attr name="expandDrawable" format="reference" />
         <attr name="tipsColor" format="color" />
         <!-- positions属性只能指定<enum>声明的其中之一 -->
-        <attr name="position">
+        <attr name="tipPosition">
             <enum name="align_right" value="0" />
             <enum name="bottom_start" value="1" />
             <enum name="bottom_center" value="2" />

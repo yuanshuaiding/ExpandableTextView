@@ -73,11 +73,11 @@ public class ExpandableTextView extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView);
         if (typedArray != null) {
             mOriginText = typedArray.getString(R.styleable.ExpandableTextView_android_text);
-            mLines = typedArray.getInteger(R.styleable.ExpandableTextView_lines, mLines);
+            mLines = typedArray.getInteger(R.styleable.ExpandableTextView_expandLines, mLines);
             mContentColor = typedArray.getColor(R.styleable.ExpandableTextView_android_textColor, Color.BLACK);
             mTipsColor = typedArray.getColor(R.styleable.ExpandableTextView_tipsColor, Color.RED);
             mContentTextSize = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_android_textSize, 14);
-            mPosition = typedArray.getInteger(R.styleable.ExpandableTextView_position, mPosition);
+            mPosition = typedArray.getInteger(R.styleable.ExpandableTextView_tipPosition, mPosition);
             mExpandDrawable = typedArray.getDrawable(R.styleable.ExpandableTextView_expandDrawable);
             if (mExpandDrawable != null) {
                 mExpandDrawable.setBounds(0, 0, mContentTextSize, mContentTextSize);
@@ -86,11 +86,11 @@ public class ExpandableTextView extends LinearLayout {
             if (mCollapseDrawable != null) {
                 mCollapseDrawable.setBounds(0, 0, mContentTextSize, mContentTextSize);
             }
-            String expandLabel = typedArray.getString(R.styleable.ExpandableTextView_expandLabel);
+            String expandLabel = typedArray.getString(R.styleable.ExpandableTextView_expandTipLabel);
             if (!TextUtils.isEmpty(expandLabel)) {
                 TIP_EXPAND = expandLabel;
             }
-            String collapseLabel = typedArray.getString(R.styleable.ExpandableTextView_collapseLabel);
+            String collapseLabel = typedArray.getString(R.styleable.ExpandableTextView_collapseTipLabel);
             if (!TextUtils.isEmpty(collapseLabel)) {
                 TIP_COLLAPSE = collapseLabel;
             }
