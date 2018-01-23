@@ -336,7 +336,11 @@ public class ExpandableTextView extends LinearLayout {
             // 最后一行的结束字符位置
             int lastLineEndIndex = layout.getLineVisibleEnd(mLines - 1);
             // 计算后缀的宽度
-            int expandedTextWidth = (int) paint.measureText(ELLIPSE + "   " + TIP_EXPAND + " " + imgTag);
+            String spaceImageTag = " " + imgTag;
+            if (mExpandDrawable == null) {
+                spaceImageTag = "";
+            }
+            int expandedTextWidth = (int) paint.measureText(ELLIPSE + "   " + TIP_EXPAND + spaceImageTag);
             // 获取最后一行的宽
             float lastLineWidth = layout.getLineWidth(mLines - 1);
             // 如果大于屏幕宽度则需要减去部分字符
@@ -400,21 +404,25 @@ public class ExpandableTextView extends LinearLayout {
      * @param spannable 需修改样式的文本
      */
     private void setSpan(SpannableStringBuilder spannable, boolean isExpand) {
-        Drawable drawable;
+        Drawable drawable = null;
         // 添加一点空白用于分隔
         spannable.append("  ");
         int tipsLen;
         // 判断是展开还是收起
         if (isExpand) {
             spannable.append(TIP_COLLAPSE);
-            // 插入图片
-            drawable = mCollapseDrawable;
-            drawable.setBounds(0, 0, (int) mTvContent.getTextSize(), (int) mTvContent.getTextSize());
+            if (mCollapseDrawable != null) {
+                // 插入图片
+                drawable = mCollapseDrawable;
+                drawable.setBounds(0, 0, (int) mTvContent.getTextSize(), (int) mTvContent.getTextSize());
+            }
             tipsLen = TIP_COLLAPSE.length();
         } else {
             spannable.append(TIP_EXPAND);
-            drawable = mExpandDrawable;
-            drawable.setBounds(0, 0, (int) mTvContent.getTextSize(), (int) mTvContent.getTextSize());
+            if (mExpandDrawable != null) {
+                drawable = mExpandDrawable;
+                drawable.setBounds(0, 0, (int) mTvContent.getTextSize(), (int) mTvContent.getTextSize());
+            }
             tipsLen = TIP_EXPAND.length();
         }
         // 设置点击事件
