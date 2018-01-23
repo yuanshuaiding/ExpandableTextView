@@ -73,7 +73,7 @@ public class ExpandableTextView extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView);
         if (typedArray != null) {
             mOriginText = typedArray.getString(R.styleable.ExpandableTextView_android_text);
-            mLines = typedArray.getInteger(R.styleable.ExpandableTextView_expandLines, mLines);
+            mLines = typedArray.getInteger(R.styleable.ExpandableTextView_collapseLines, mLines);
             mContentColor = typedArray.getColor(R.styleable.ExpandableTextView_android_textColor, Color.BLACK);
             mTipsColor = typedArray.getColor(R.styleable.ExpandableTextView_tipsColor, Color.RED);
             mContentTextSize = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_android_textSize, 14);
