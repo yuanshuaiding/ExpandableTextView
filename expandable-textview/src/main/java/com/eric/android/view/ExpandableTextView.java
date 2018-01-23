@@ -58,6 +58,10 @@ public class ExpandableTextView extends LinearLayout {
      * 提示文本的点击事件
      */
     private ExpandedClickableSpan mClickableSpan = new ExpandedClickableSpan();
+    /**
+     * 展开折叠监听器
+     */
+    private OnToggleListener toggleListener;
 
     public ExpandableTextView(Context context) {
         this(context, null, 0);
@@ -289,6 +293,9 @@ public class ExpandableTextView extends LinearLayout {
                 mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
             mTvExpand.setText(TIP_COLLAPSE);
+            if (toggleListener != null) {
+                toggleListener.onToggle(true);
+            }
         } else {
             //收起动画
             ValueAnimator anim = ValueAnimator.ofInt(expandHeight, collapseHeight).setDuration(200);
@@ -311,6 +318,9 @@ public class ExpandableTextView extends LinearLayout {
                 mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
             mTvExpand.setText(TIP_EXPAND);
+            if (toggleListener != null) {
+                toggleListener.onToggle(false);
+            }
         }
     }
 
@@ -470,5 +480,13 @@ public class ExpandableTextView extends LinearLayout {
             //去掉下划线
             ds.setUnderlineText(false);
         }
+    }
+
+    public void setToggleListener(OnToggleListener listener) {
+        this.toggleListener = listener;
+    }
+
+    interface OnToggleListener {
+        void onToggle(boolean expanded);
     }
 }
