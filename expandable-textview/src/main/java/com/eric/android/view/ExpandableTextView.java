@@ -486,7 +486,7 @@ public class ExpandableTextView extends LinearLayout {
         this.toggleListener = listener;
     }
 
-    interface OnToggleListener {
+    public interface OnToggleListener {
         void onToggle(boolean expanded);
     }
 }
