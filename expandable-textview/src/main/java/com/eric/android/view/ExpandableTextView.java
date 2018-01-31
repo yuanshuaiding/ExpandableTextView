@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -159,21 +161,26 @@ public class ExpandableTextView extends LinearLayout {
         mTvExpand.setLayoutParams(params);
     }
 
-    private void initText(String text) {
+    private void initText(final String text) {
         //根据指定的折叠行数获取折叠文本
         mOriginText = text;
         mTvContent.setText(mOriginText);
         mTvContentTemp.setText(mOriginText);
-        mTvContent.post(new Runnable() {
+        mTvContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void run() {
+            public void onGlobalLayout() {
+                //移除布局监听,防止重复测量
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mTvContent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    mTvContent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
                 toggleText();
                 //获取控件尺寸
                 mTextTotalWidth = getWidth() - getPaddingLeft() - getPaddingRight();
                 Log.d(TAG, "控件宽度：" + mTextTotalWidth);
             }
         });
-
     }
 
     public void setText(String text) {
@@ -335,6 +342,7 @@ public class ExpandableTextView extends LinearLayout {
             mTvContentTemp.setText(text);
             layout = mTvContentTemp.getLayout();
         }
+        if (layout == null) return;
         // 获取 paint，用于计算文字宽度
         TextPaint paint = mTvContentTemp.getPaint();
         int line = layout.getLineCount();
@@ -381,6 +389,7 @@ public class ExpandableTextView extends LinearLayout {
             mTvContent.setText(text);
             layout = mTvContent.getLayout();
         }
+        if (layout == null) return;
         // 获取 paint，用于计算文字宽度
         TextPaint paint = mTvContent.getPaint();
         int line = layout.getLineCount();
