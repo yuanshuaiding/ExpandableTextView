@@ -11,7 +11,7 @@
 ```
 dependencies {
     ```
-    implementation 'com.eric.android.view:expandable-textview:1.0.8'
+    implementation 'com.eric.android.view:expandable-textview:1.0.9'
 
     ```
 }
