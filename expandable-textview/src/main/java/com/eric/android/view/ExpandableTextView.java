@@ -175,10 +175,10 @@ public class ExpandableTextView extends LinearLayout {
                 } else {
                     mTvContent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
-                toggleText();
                 //获取控件尺寸
                 mTextTotalWidth = getWidth() - getPaddingLeft() - getPaddingRight();
                 Log.d(TAG, "控件宽度：" + mTextTotalWidth);
+                toggleText();
             }
         });
     }
@@ -358,20 +358,35 @@ public class ExpandableTextView extends LinearLayout {
             if (mExpandDrawable == null) {
                 spaceImageTag = "";
             }
-            int expandedTextWidth = (int) paint.measureText(ELLIPSE + "   " + TIP_EXPAND + spaceImageTag);
+            //这里使用4个空格是为了确保最终拼接的长度不会超过整行宽度
+            int expandedTextWidth = (int) paint.measureText(ELLIPSE + "  " + TIP_EXPAND + spaceImageTag);
             // 获取最后一行的宽
             float lastLineWidth = layout.getLineWidth(mLines - 1);
             // 如果大于屏幕宽度则需要减去部分字符
-            if (lastLineWidth + expandedTextWidth > mTextTotalWidth) {
+            if (lastLineWidth + expandedTextWidth >= mTextTotalWidth) {
                 int cutCount = paint.breakText(mOriginText, lastLineStartIndex, lastLineEndIndex, false, expandedTextWidth, null);
                 lastLineEndIndex -= cutCount;
+            }
+            StringBuilder appd= new StringBuilder(ELLIPSE);
+
+            //再测量一下,有可能放置不下
+            lastLineWidth = paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag);
+            if (lastLineWidth > mTextTotalWidth) {
+                //再减掉一个字
+                lastLineEndIndex--;
+                //添加点占位
+                int spaceWidth= (int) paint.measureText(".");
+                int spaceCount= (int) ((mTextTotalWidth-paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag))/spaceWidth);
+                for (int i=0;i<spaceCount;i++){
+                    appd.append(".");
+                }
             }
             // 因设置的文本可能是带有样式的文本，如SpannableStringBuilder，所以根据计算的字符数从原始文本中截取
             SpannableStringBuilder spannable = new SpannableStringBuilder();
             // 截取文本，还是因为原始文本的样式原因不能直接使用paragraphs中的文本
             CharSequence ellipsizeText = mOriginText.subSequence(0, lastLineEndIndex);
             spannable.append(ellipsizeText);
-            spannable.append(ELLIPSE);
+            spannable.append(appd.toString());
             // 设置样式
             setSpan(spannable, false);
             mTvContentTemp.setText(spannable);
@@ -398,7 +413,7 @@ public class ExpandableTextView extends LinearLayout {
         } else {
             String space = "  ";
             // 计算后缀的宽度
-            int expandedTextWidth = (int) paint.measureText(space + TIP_COLLAPSE + " " + imgTag);
+            int expandedTextWidth = (int) paint.measureText(space + TIP_COLLAPSE + " " + imgTag) + 1;
             // 获取最后一行的宽
             float lastLineWidth = layout.getLineWidth(line - 1);
             // 如果大于屏幕宽度则需要使用空白填充，让控件自动换行
@@ -414,7 +429,6 @@ public class ExpandableTextView extends LinearLayout {
             setSpan(spannable, true);
             mTvContent.setText(spannable);
         }
-
     }
 
     /**
