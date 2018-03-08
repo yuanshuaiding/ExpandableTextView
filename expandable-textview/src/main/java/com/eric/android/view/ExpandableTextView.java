@@ -190,6 +190,18 @@ public class ExpandableTextView extends LinearLayout {
     }
 
     /**
+     * 指定显示文本,并指定赋值后展开还是折叠的状态
+     *
+     * @param text  显示文本
+     * @param close true代表默认收起,false代表默认展开
+     */
+    public void setText(String text, boolean close) {
+        mIsExpand = !close;
+        clicledByUser = true;
+        initText(text);
+    }
+
+    /**
      * 设置展开提示语，在setText方法之前调用
      *
      * @param label 展开提示语，如“展开”
@@ -367,7 +379,7 @@ public class ExpandableTextView extends LinearLayout {
                 int cutCount = paint.breakText(mOriginText, lastLineStartIndex, lastLineEndIndex, false, expandedTextWidth, null);
                 lastLineEndIndex -= cutCount;
             }
-            StringBuilder appd= new StringBuilder(ELLIPSE);
+            StringBuilder appd = new StringBuilder(ELLIPSE);
 
             //再测量一下,有可能放置不下
             lastLineWidth = paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag);
@@ -375,9 +387,9 @@ public class ExpandableTextView extends LinearLayout {
                 //再减掉一个字
                 lastLineEndIndex--;
                 //添加点占位
-                int spaceWidth= (int) paint.measureText(".");
-                int spaceCount= (int) ((mTextTotalWidth-paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag))/spaceWidth);
-                for (int i=0;i<spaceCount;i++){
+                int spaceWidth = (int) paint.measureText(".");
+                int spaceCount = (int) ((mTextTotalWidth - paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag)) / spaceWidth);
+                for (int i = 0; i < spaceCount; i++) {
                     appd.append(".");
                 }
             }
