@@ -26,9 +26,9 @@ public class ExpandableTextView4List extends ExpandableTextView {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setText(String text, boolean close) {
+    public void setText(String text, boolean open) {
         mCancelAnim = true;
-        super.setText(text, close);
+        super.setText(text, open);
         if (mMeasured) {
             toggleText();
         }
