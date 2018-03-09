@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
@@ -44,7 +43,7 @@ public class ExpandableTextView extends LinearLayout {
     private final TextView mTvContent;//内容
     private final TextView mTvContentTemp;//收起后的内容
     private final TextView mTvExpand;//折叠控件
-    private boolean mIsExpand;//是否折叠的标记
+    protected boolean mIsExpand;//是否折叠的标记
     private String mOriginText = "";//展示的文本
     private int mContentTextSize;
     private int mContentColor;
@@ -54,7 +53,8 @@ public class ExpandableTextView extends LinearLayout {
     private Drawable mCollapseDrawable;
     private Drawable mExpandDrawable;
     private int collapseHeight;
-    private boolean clicledByUser;
+    private boolean performedByUser;
+    protected boolean mCancelAnim;
     private int mTextTotalWidth;
     /**
      * 提示文本的点击事件
@@ -64,6 +64,7 @@ public class ExpandableTextView extends LinearLayout {
      * 展开折叠监听器
      */
     private OnToggleListener toggleListener;
+    protected boolean mMeasured;
 
     public ExpandableTextView(Context context) {
         this(context, null, 0);
@@ -126,14 +127,16 @@ public class ExpandableTextView extends LinearLayout {
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                clicledByUser = true;
+                performedByUser = true;
+                mCancelAnim = false;
                 toggleText();
             }
         };
         mTvContent.setOnClickListener(clickListener);
         mTvContentTemp.setOnClickListener(clickListener);
         mTvExpand.setOnClickListener(clickListener);
-        setText(mOriginText);
+        if (!TextUtils.isEmpty(mOriginText))
+            setText(mOriginText);
         //设置折叠展开标识控件的位置
         updateExpandArrowAndPosition(mPosition);
     }
@@ -166,26 +169,31 @@ public class ExpandableTextView extends LinearLayout {
         mOriginText = text;
         mTvContent.setText(mOriginText);
         mTvContentTemp.setText(mOriginText);
-        mTvContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //移除布局监听,防止重复测量
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mTvContent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    mTvContent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+        if (getViewTreeObserver() != null) {
+            getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+                @Override
+                public boolean onPreDraw() {
+                    getViewTreeObserver().removeOnPreDrawListener(this);
+                    if (!mMeasured) {
+                        //获取控件尺寸
+                        if (getWidth() != 0) {
+                            mTextTotalWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+                            Log.d(TAG, "控件宽度：" + mTextTotalWidth);
+                            mMeasured = true;
+                            toggleText();
+                        }
+                    }
+                    return true;
                 }
-                //获取控件尺寸
-                mTextTotalWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-                Log.d(TAG, "控件宽度：" + mTextTotalWidth);
-                toggleText();
-            }
-        });
+            });
+        }
     }
 
     public void setText(String text) {
+        //if (TextUtils.isEmpty(text)) return;
         mIsExpand = !mIsExpand;
-        clicledByUser = false;
+        performedByUser = false;
         initText(text);
     }
 
@@ -197,7 +205,7 @@ public class ExpandableTextView extends LinearLayout {
      */
     public void setText(String text, boolean close) {
         mIsExpand = !close;
-        clicledByUser = true;
+        performedByUser = true;
         initText(text);
     }
 
@@ -269,7 +277,7 @@ public class ExpandableTextView extends LinearLayout {
         collapseHeight = getTextViewHeight(mTvContentTemp);
         Log.d(TAG, "展开高度" + expandHeight);
         Log.d(TAG, "收起高度" + collapseHeight);
-        //此处使用LinearLayout.LayoutParams控制辅助文本控件mTvContentTemp的高度，如果直接setHeight会失去ellipsize效果
+        //此处使用LinearLayout.LayoutParams控制辅助文本控件mTvContentTemp的高度
         final LinearLayout.LayoutParams layoutParams = (LayoutParams) mTvContentTemp.getLayoutParams();
         if (expandHeight <= collapseHeight) {
             //说明无需折叠
@@ -283,7 +291,7 @@ public class ExpandableTextView extends LinearLayout {
                 mTvExpand.setVisibility(VISIBLE);
             }
         }
-        if (!clicledByUser) {
+        if (!performedByUser) {
             layoutParams.height = collapseHeight;
             mTvContentTemp.setLayoutParams(layoutParams);
             mTvContent.setHeight(0);
@@ -295,17 +303,23 @@ public class ExpandableTextView extends LinearLayout {
             return;
         }
         if (mIsExpand) {
-            //展开动画
-            ValueAnimator anim = ValueAnimator.ofInt(collapseHeight, expandHeight).setDuration(200);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mTvContent.setHeight((Integer) animation.getAnimatedValue());
-                    layoutParams.height = 0;
-                    mTvContentTemp.setLayoutParams(layoutParams);
-                }
-            });
-            anim.start();
+            if (mCancelAnim) {
+                mTvContent.setHeight(expandHeight);
+                layoutParams.height = 0;
+                mTvContentTemp.setLayoutParams(layoutParams);
+            } else {
+                //展开动画
+                ValueAnimator anim = ValueAnimator.ofInt(collapseHeight, expandHeight).setDuration(200);
+                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        mTvContent.setHeight((Integer) animation.getAnimatedValue());
+                        layoutParams.height = 0;
+                        mTvContentTemp.setLayoutParams(layoutParams);
+                    }
+                });
+                anim.start();
+            }
             if (mCollapseDrawable != null) {
                 mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, mCollapseDrawable, null);
             } else {
@@ -316,21 +330,27 @@ public class ExpandableTextView extends LinearLayout {
                 toggleListener.onToggle(true);
             }
         } else {
-            //收起动画
-            ValueAnimator anim = ValueAnimator.ofInt(expandHeight, collapseHeight).setDuration(200);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int h = (Integer) animation.getAnimatedValue();
-                    mTvContent.setHeight(h);
-                    if (h == collapseHeight) {
-                        mTvContent.setHeight(0);
-                        layoutParams.height = collapseHeight;
-                        mTvContentTemp.setLayoutParams(layoutParams);
+            if (mCancelAnim) {
+                mTvContent.setHeight(0);
+                layoutParams.height = collapseHeight;
+                mTvContentTemp.setLayoutParams(layoutParams);
+            } else {
+                //收起动画
+                ValueAnimator anim = ValueAnimator.ofInt(expandHeight, collapseHeight).setDuration(200);
+                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int h = (Integer) animation.getAnimatedValue();
+                        mTvContent.setHeight(h);
+                        if (h == collapseHeight) {
+                            mTvContent.setHeight(0);
+                            layoutParams.height = collapseHeight;
+                            mTvContentTemp.setLayoutParams(layoutParams);
+                        }
                     }
-                }
-            });
-            anim.start();
+                });
+                anim.start();
+            }
             if (mExpandDrawable != null) {
                 mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, mExpandDrawable, null);
             } else {
@@ -341,12 +361,13 @@ public class ExpandableTextView extends LinearLayout {
                 toggleListener.onToggle(false);
             }
         }
+        invalidate();
     }
 
     /**
      * 格式化折叠时的文本
      */
-    private void formatCollapseText(CharSequence text) {
+    public void formatCollapseText(CharSequence text) {
         // 获取 layout，用于计算行数
         Layout layout = mTvContentTemp.getLayout();
         // 调用 setText 用于重置 Layout
@@ -382,17 +403,7 @@ public class ExpandableTextView extends LinearLayout {
             StringBuilder appd = new StringBuilder(ELLIPSE);
 
             //再测量一下,有可能放置不下
-            lastLineWidth = paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag);
-            if (lastLineWidth > mTextTotalWidth) {
-                //再减掉一个字
-                lastLineEndIndex--;
-                //添加点占位
-                int spaceWidth = (int) paint.measureText(".");
-                int spaceCount = (int) ((mTextTotalWidth - paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag)) / spaceWidth);
-                for (int i = 0; i < spaceCount; i++) {
-                    appd.append(".");
-                }
-            }
+            lastLineEndIndex = ensureLastLineEndIndex(paint, lastLineStartIndex, lastLineEndIndex, spaceImageTag, appd);
             // 因设置的文本可能是带有样式的文本，如SpannableStringBuilder，所以根据计算的字符数从原始文本中截取
             SpannableStringBuilder spannable = new SpannableStringBuilder();
             // 截取文本，还是因为原始文本的样式原因不能直接使用paragraphs中的文本
@@ -401,8 +412,25 @@ public class ExpandableTextView extends LinearLayout {
             spannable.append(appd.toString());
             // 设置样式
             setSpan(spannable, false);
+            Log.d("截取后的字符串:", spannable.toString());
             mTvContentTemp.setText(spannable);
         }
+    }
+
+    protected int ensureLastLineEndIndex(TextPaint paint, int lastLineStartIndex, int lastLineEndIndex, String spaceImageTag, StringBuilder appd) {
+        float lastLineWidth;
+        lastLineWidth = paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag);
+        if (lastLineWidth > mTextTotalWidth) {
+            //再减掉一个字
+            lastLineEndIndex--;
+            //添加点占位
+            int spaceWidth = (int) paint.measureText(".");
+            int spaceCount = (int) ((mTextTotalWidth - paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag)) / spaceWidth);
+            for (int i = 0; i < spaceCount; i++) {
+                appd.append(".");
+            }
+        }
+        return lastLineEndIndex;
     }
 
     /**
