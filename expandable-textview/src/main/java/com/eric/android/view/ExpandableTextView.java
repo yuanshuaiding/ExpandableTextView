@@ -44,7 +44,7 @@ public class ExpandableTextView extends LinearLayout {
     private final TextView mTvContentTemp;//收起后的内容
     private final TextView mTvExpand;//折叠控件
     protected boolean mIsExpand;//是否折叠的标记
-    private String mOriginText = "";//展示的文本
+    private CharSequence mOriginText = "";//展示的文本
     private int mContentTextSize;
     private int mContentColor;
     private int mTipsColor;
@@ -164,7 +164,7 @@ public class ExpandableTextView extends LinearLayout {
         mTvExpand.setLayoutParams(params);
     }
 
-    private void initText(final String text) {
+    private void initText(final CharSequence text) {
         //根据指定的折叠行数获取折叠文本
         mOriginText = text;
         mTvContent.setText(mOriginText);
@@ -190,11 +190,22 @@ public class ExpandableTextView extends LinearLayout {
         }
     }
 
-    public void setText(String text) {
+    public void setText(CharSequence text) {
         //if (TextUtils.isEmpty(text)) return;
         mIsExpand = !mIsExpand;
         performedByUser = false;
         initText(text);
+    }
+
+    /**
+     * 用于设置Html格式的文本
+     *
+     * @param spannedTxt
+     */
+    public void setText(Spanned spannedTxt) {
+        mIsExpand = !mIsExpand;
+        performedByUser = false;
+        initText(spannedTxt);
     }
 
     /**
@@ -255,7 +266,7 @@ public class ExpandableTextView extends LinearLayout {
         }
     }
 
-    public String getText() {
+    public CharSequence getText() {
         return mOriginText;
     }
 
@@ -266,7 +277,7 @@ public class ExpandableTextView extends LinearLayout {
         //修改展开折叠标志
         mIsExpand = !mIsExpand;
         if (mPosition == ALIGN_RIGHT) {
-            mTvExpand.setVisibility(GONE);
+            //mTvExpand.setVisibility(GONE);
             mTvContent.setMovementMethod(LinkMovementMethod.getInstance());
             mTvContentTemp.setMovementMethod(LinkMovementMethod.getInstance());
             formatExpandText(mOriginText);
@@ -419,13 +430,14 @@ public class ExpandableTextView extends LinearLayout {
 
     protected int ensureLastLineEndIndex(TextPaint paint, int lastLineStartIndex, int lastLineEndIndex, String spaceImageTag, StringBuilder appd) {
         float lastLineWidth;
-        lastLineWidth = paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag);
+        String originStr = mOriginText.toString();
+        lastLineWidth = paint.measureText(originStr.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag);
         if (lastLineWidth > mTextTotalWidth) {
             //再减掉一个字
             lastLineEndIndex--;
             //添加点占位
             int spaceWidth = (int) paint.measureText(".");
-            int spaceCount = (int) ((mTextTotalWidth - paint.measureText(mOriginText.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag)) / spaceWidth);
+            int spaceCount = (int) ((mTextTotalWidth - paint.measureText(originStr.substring(lastLineStartIndex, lastLineEndIndex) + "  " + ELLIPSE + "  " + TIP_EXPAND + spaceImageTag)) / spaceWidth);
             for (int i = 0; i < spaceCount; i++) {
                 appd.append(".");
             }
@@ -436,7 +448,7 @@ public class ExpandableTextView extends LinearLayout {
     /**
      * 格式化展开式的文本，直接在后面拼接即可
      */
-    private void formatExpandText(String text) {
+    private void formatExpandText(CharSequence text) {
         // 获取 layout，用于计算行数
         Layout layout = mTvContent.getLayout();
         // 调用 setText 用于重置 Layout
@@ -463,7 +475,7 @@ public class ExpandableTextView extends LinearLayout {
                 for (int i = 0; i <= spaceCount; i++) {
                     space += space;
                 }
-                text += space;
+                text = text + space;
             }
             SpannableStringBuilder spannable = new SpannableStringBuilder(text);
             setSpan(spannable, true);

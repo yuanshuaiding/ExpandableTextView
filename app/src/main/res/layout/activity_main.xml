@@ -1,81 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.eric.expandabletextview.MainActivity">
+    android:layout_height="match_parent">
 
-    <com.eric.android.view.ExpandableTextView
-        android:id="@+id/expand_tv1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/colorAccent"
-        app:collapseDrawable="@mipmap/icon_content_collap"
-        app:expandDrawable="@mipmap/icon_content_expand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:collapseLines="3"
-        app:tipPosition="align_right"
-        app:tipsColor="#08f017"
-        android:background="#aaccdd"/>
+        android:orientation="vertical"
+        tools:context="com.eric.expandabletextview.MainActivity">
 
-    <com.eric.android.view.ExpandableTextView
-        android:id="@+id/expand_tv2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:textColor="#3f8cd9"
-        app:collapseDrawable="@mipmap/icon_content_collap"
-        app:expandDrawable="@mipmap/icon_content_expand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expand_tv1"
-        app:collapseLines="3"
-        app:tipPosition="bottom_start"
-        app:tipsColor="#d521e9" />
+        <TextView
+            android:id="@+id/tv_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3" />
 
-    <com.eric.android.view.ExpandableTextView
-        android:id="@+id/expand_tv3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:textColor="#57279f"
-        app:collapseDrawable="@mipmap/icon_content_collap"
-        app:expandDrawable="@mipmap/icon_content_expand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expand_tv2"
-        app:collapseLines="3"
-        app:tipPosition="bottom_center"
-        app:tipsColor="#08baf0" />
+        <com.eric.android.view.ExpandableTextView
+            android:id="@+id/expand_tv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#aaccdd"
+            android:textColor="@color/colorAccent"
+            app:collapseDrawable="@mipmap/icon_content_collap"
+            app:collapseLines="5"
+            app:expandDrawable="@mipmap/icon_content_expand"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tipPosition="align_right"
+            app:tipsColor="#08f017" />
 
-    <com.eric.android.view.ExpandableTextView
-        android:id="@+id/expand_tv4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:textColor="#c9b92a"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expand_tv3"
-        app:collapseLines="3"
-        app:expandTipLabel="点击文本可以展开"
-        app:collapseTipLabel="点击文本可以收起"
-        app:tipPosition="align_right"
-        app:tipsColor="#f02b08"
-        android:background="#ccdd00"/>
-</android.support.constraint.ConstraintLayout>
+        <com.eric.android.view.ExpandableTextView
+            android:id="@+id/expand_tv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:textColor="#3f8cd9"
+            app:collapseDrawable="@mipmap/icon_content_collap"
+            app:collapseLines="3"
+            app:expandDrawable="@mipmap/icon_content_expand"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expand_tv1"
+            app:tipPosition="bottom_start"
+            app:tipsColor="#d521e9" />
+
+        <com.eric.android.view.ExpandableTextView
+            android:id="@+id/expand_tv3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:textColor="#57279f"
+            app:collapseDrawable="@mipmap/icon_content_collap"
+            app:collapseLines="3"
+            app:expandDrawable="@mipmap/icon_content_expand"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expand_tv2"
+            app:tipPosition="bottom_center"
+            app:tipsColor="#08baf0" />
+
+        <com.eric.android.view.ExpandableTextView
+            android:id="@+id/expand_tv4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:background="#ccdd00"
+            android:textColor="#c9b92a"
+            app:collapseLines="3"
+            app:collapseTipLabel="点击文本可以收起"
+            app:expandTipLabel="点击文本可以展开"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/expand_tv3"
+            app:tipPosition="align_right"
+            app:tipsColor="#f02b08" />
+    </LinearLayout>
+</ScrollView>
