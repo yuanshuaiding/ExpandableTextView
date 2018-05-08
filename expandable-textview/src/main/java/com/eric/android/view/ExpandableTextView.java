@@ -16,6 +16,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,15 +113,15 @@ public class ExpandableTextView extends LinearLayout {
         mTvContentTemp = findViewById(R.id.tv_content_temp);
         mTvExpand = findViewById(R.id.tv_arrow);
         mTvExpand.setTextColor(mTipsColor);
-        mTvExpand.setTextSize(mContentTextSize);
+        mTvExpand.setTextSize(TypedValue.COMPLEX_UNIT_PX,mContentTextSize);
         mTvExpand.setCompoundDrawablePadding(5);
         if (mExpandDrawable != null) {
             mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, mExpandDrawable, null);
         }
         mTvContent.setTextColor(mContentColor);
         mTvContentTemp.setTextColor(mContentColor);
-        mTvContent.setTextSize(mContentTextSize);
-        mTvContentTemp.setTextSize(mContentTextSize);
+        mTvContent.setTextSize(TypedValue.COMPLEX_UNIT_PX,mContentTextSize);
+        mTvContentTemp.setTextSize(TypedValue.COMPLEX_UNIT_PX,mContentTextSize);
         mTvContentTemp.setEllipsize(TextUtils.TruncateAt.END);
         mTvContentTemp.setMaxLines(mLines);
         mTvExpand.setText(TIP_EXPAND);
