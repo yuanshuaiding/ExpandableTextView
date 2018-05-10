@@ -84,7 +84,7 @@ public class ExpandableTextView extends LinearLayout {
             mLines = typedArray.getInteger(R.styleable.ExpandableTextView_collapseLines, mLines);
             mContentColor = typedArray.getColor(R.styleable.ExpandableTextView_android_textColor, Color.BLACK);
             mTipsColor = typedArray.getColor(R.styleable.ExpandableTextView_tipsColor, Color.RED);
-            mContentTextSize = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_android_textSize, 14);
+            mContentTextSize = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_android_textSize, sp2px(context, 14));
             mPosition = typedArray.getInteger(R.styleable.ExpandableTextView_tipPosition, mPosition);
             mExpandDrawable = typedArray.getDrawable(R.styleable.ExpandableTextView_expandDrawable);
             if (mExpandDrawable != null) {
@@ -113,15 +113,15 @@ public class ExpandableTextView extends LinearLayout {
         mTvContentTemp = findViewById(R.id.tv_content_temp);
         mTvExpand = findViewById(R.id.tv_arrow);
         mTvExpand.setTextColor(mTipsColor);
-        mTvExpand.setTextSize(TypedValue.COMPLEX_UNIT_PX,mContentTextSize);
+        mTvExpand.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContentTextSize);
         mTvExpand.setCompoundDrawablePadding(5);
         if (mExpandDrawable != null) {
             mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, mExpandDrawable, null);
         }
         mTvContent.setTextColor(mContentColor);
         mTvContentTemp.setTextColor(mContentColor);
-        mTvContent.setTextSize(TypedValue.COMPLEX_UNIT_PX,mContentTextSize);
-        mTvContentTemp.setTextSize(TypedValue.COMPLEX_UNIT_PX,mContentTextSize);
+        mTvContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContentTextSize);
+        mTvContentTemp.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContentTextSize);
         mTvContentTemp.setEllipsize(TextUtils.TruncateAt.END);
         mTvContentTemp.setMaxLines(mLines);
         mTvExpand.setText(TIP_EXPAND);
@@ -140,6 +140,11 @@ public class ExpandableTextView extends LinearLayout {
             setText(mOriginText);
         //设置折叠展开标识控件的位置
         updateExpandArrowAndPosition(mPosition);
+    }
+
+    private int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
     }
 
     private void updateExpandArrowAndPosition(int position) {
