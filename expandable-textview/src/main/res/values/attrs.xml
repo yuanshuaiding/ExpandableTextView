@@ -5,9 +5,9 @@
         <!--默认展示行数，只能使用整数-->
         <attr name="collapseLines" format="integer" />
         <!--展开提示语-->
-        <attr name="expandTipLabel" format="string"/>
+        <attr name="expandTipLabel" format="string" />
         <!--收起提示语-->
-        <attr name="collapseTipLabel" format="string"/>
+        <attr name="collapseTipLabel" format="string" />
         <!--收缩后的图标，只能使用应用图片资源-->
         <attr name="collapseDrawable" format="reference" />
         <!--展开后的图标，只能使用应用图片资源-->
@@ -26,5 +26,7 @@
         <attr name="android:textSize" />
         <!--自定义文字直接使用系统属性-->
         <attr name="android:text" />
+        <!--自定义展开折叠控件与顶部间距-->
+        <attr name="tipMarginTop" format="dimension" />
     </declare-styleable>
 </resources>

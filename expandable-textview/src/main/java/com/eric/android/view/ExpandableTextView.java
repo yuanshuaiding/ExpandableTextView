@@ -66,6 +66,7 @@ public class ExpandableTextView extends LinearLayout {
      */
     private OnToggleListener toggleListener;
     protected boolean mMeasured;
+    private int mTipMarginTop;
 
     public ExpandableTextView(Context context) {
         this(context, null, 0);
@@ -81,6 +82,7 @@ public class ExpandableTextView extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView);
         if (typedArray != null) {
             mOriginText = typedArray.getString(R.styleable.ExpandableTextView_android_text);
+            mTipMarginTop = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_tipMarginTop, 0);
             mLines = typedArray.getInteger(R.styleable.ExpandableTextView_collapseLines, mLines);
             mContentColor = typedArray.getColor(R.styleable.ExpandableTextView_android_textColor, Color.BLACK);
             mTipsColor = typedArray.getColor(R.styleable.ExpandableTextView_tipsColor, Color.RED);
@@ -151,12 +153,15 @@ public class ExpandableTextView extends LinearLayout {
         LayoutParams params = new LayoutParams(mTvExpand.getLayoutParams());
         switch (position) {
             case BOTTOM_START:
+                params.topMargin = mTipMarginTop;
                 params.gravity = Gravity.LEFT;
                 break;
             case BOTTOM_CENTER:
+                params.topMargin = mTipMarginTop;
                 params.gravity = Gravity.CENTER_HORIZONTAL;
                 break;
             case BOTTOM_END:
+                params.topMargin = mTipMarginTop;
                 params.gravity = Gravity.RIGHT;
                 break;
             case ALIGN_RIGHT:
