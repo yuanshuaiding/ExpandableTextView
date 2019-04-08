@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "1.1.7"
+        versionCode 21
+        versionName "1.2.1"
     }
 
     buildTypes {
@@ -20,7 +20,7 @@ android {
     lintOptions {
         abortOnError false
     }
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 }
 
 dependencies {

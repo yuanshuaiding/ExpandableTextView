@@ -2,6 +2,8 @@
 <resources>
     <!--可折叠文本控件属性组声明-->
     <declare-styleable name="ExpandableTextView">
+        <!--是否可以展开-->
+        <attr name="expandable" format="boolean" />
         <!--默认展示行数，只能使用整数-->
         <attr name="collapseLines" format="integer" />
         <!--展开提示语-->

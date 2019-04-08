@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -46,6 +47,7 @@ public class ExpandableTextView extends LinearLayout {
     private final TextView mTvExpand;//折叠控件
     protected boolean mIsExpand;//是否折叠的标记
     private CharSequence mOriginText = "";//展示的文本
+    private boolean mExpandable = true;//是否支持点击展开
     private int mContentTextSize;
     private int mContentColor;
     private int mTipsColor;
@@ -82,6 +84,7 @@ public class ExpandableTextView extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableTextView);
         if (typedArray != null) {
             mOriginText = typedArray.getString(R.styleable.ExpandableTextView_android_text);
+            mExpandable = typedArray.getBoolean(R.styleable.ExpandableTextView_expandable, true);
             mTipMarginTop = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_tipMarginTop, 0);
             mLines = typedArray.getInteger(R.styleable.ExpandableTextView_collapseLines, mLines);
             mContentColor = typedArray.getColor(R.styleable.ExpandableTextView_android_textColor, Color.BLACK);
@@ -127,21 +130,29 @@ public class ExpandableTextView extends LinearLayout {
         mTvContentTemp.setEllipsize(TextUtils.TruncateAt.END);
         mTvContentTemp.setMaxLines(mLines);
         mTvExpand.setText(TIP_EXPAND);
-        OnClickListener clickListener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                performedByUser = true;
-                mCancelAnim = false;
-                toggleText();
-            }
-        };
-        mTvContent.setOnClickListener(clickListener);
-        mTvContentTemp.setOnClickListener(clickListener);
-        mTvExpand.setOnClickListener(clickListener);
+        if (mExpandable) {
+            OnClickListener clickListener = new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    performedByUser = true;
+                    mCancelAnim = false;
+                    toggleText();
+                }
+            };
+            mTvContent.setOnClickListener(clickListener);
+            mTvContentTemp.setOnClickListener(clickListener);
+            mTvExpand.setOnClickListener(clickListener);
+        }
         if (!TextUtils.isEmpty(mOriginText))
             setText(mOriginText);
         //设置折叠展开标识控件的位置
         updateExpandArrowAndPosition(mPosition);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        //如果不支持展开折叠，那么layout截取事件并响应事件
+        return !mExpandable;
     }
 
     private int sp2px(Context context, float spValue) {
@@ -209,7 +220,7 @@ public class ExpandableTextView extends LinearLayout {
     }
 
     /**
-     * 用于设置Html格式的文本
+     * 用于设置支持Html格式的文本
      *
      * @param spannedTxt
      */

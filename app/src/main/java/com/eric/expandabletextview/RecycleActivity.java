@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.eric.android.view.ExpandableTextView;
 import com.eric.android.view.ExpandableTextView4List;
@@ -71,6 +72,12 @@ public class RecycleActivity extends AppCompatActivity {
                 @Override
                 public void onToggle(boolean expanded) {
                     maps.put(holder.getAdapterPosition(), expanded ? OPEN : CLOSE);
+                }
+            });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "点击事件", Toast.LENGTH_SHORT).show();
                 }
             });
         }
