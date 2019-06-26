@@ -220,23 +220,12 @@ public class ExpandableTextView extends LinearLayout {
     }
 
     /**
-     * 用于设置支持Html格式的文本
-     *
-     * @param spannedTxt
-     */
-    public void setText(Spanned spannedTxt) {
-        mIsExpand = !mIsExpand;
-        performedByUser = false;
-        initText(spannedTxt);
-    }
-
-    /**
      * 指定显示文本,并指定赋值后展开还是折叠的状态
      *
      * @param text  显示文本
      * @param close true代表默认收起,false代表默认展开
      */
-    public void setText(String text, boolean close) {
+    public void setText(CharSequence text, boolean close) {
         mIsExpand = !close;
         performedByUser = true;
         initText(text);
