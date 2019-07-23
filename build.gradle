@@ -6,7 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         //用于上传到Jcenter的插件，开源网址：https://github.com/novoda/bintray-release
         classpath 'com.novoda:bintray-release:0.9'
         // NOTE: Do not place your application dependencies here; they belong
@@ -27,14 +27,6 @@ allprojects {
             links "http://docs.oracle.com/javase/7/docs/api"
         }
     }
-}
-
-ext{
-    compileSdkVersion=26
-    buildToolsVersion='28.0.3'
-    minSdkVersion=15
-    targetSdkVersion=26
-    supportVersion='27.1.1'
 }
 
 task clean(type: Delete) {

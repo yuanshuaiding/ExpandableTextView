@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion Config.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion Config.minSdkVersion
+        targetSdkVersion Config.targetSdkVersion
         versionCode 22
         versionName "1.2.2"
     }
@@ -20,12 +20,11 @@ android {
     lintOptions {
         abortOnError false
     }
-    buildToolsVersion '28.0.3'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
+    implementation "com.android.support:appcompat-v7:$Config.supportVersion"
 }
 
 //配置上传Jcenter参数
