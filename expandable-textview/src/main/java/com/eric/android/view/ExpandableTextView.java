@@ -15,7 +15,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -201,7 +200,7 @@ public class ExpandableTextView extends LinearLayout {
                         //获取控件尺寸
                         if (getWidth() != 0) {
                             mTextTotalWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-                            Log.d(TAG, "控件宽度：" + mTextTotalWidth);
+                            LogUtil.d(TAG, "控件宽度：" + mTextTotalWidth);
                             mMeasured = true;
                             toggleText();
                         }
@@ -296,9 +295,10 @@ public class ExpandableTextView extends LinearLayout {
         }
         //计算控件高度
         int expandHeight = getTextViewHeight(mTvContent) + (mPosition == ALIGN_RIGHT ? 2 : 0);//稍微修正一下高度
-        collapseHeight = getTextViewHeight(mTvContentTemp);
-        Log.d(TAG, "展开高度" + expandHeight);
-        Log.d(TAG, "收起高度" + collapseHeight);
+        if (collapseHeight == 0)
+            collapseHeight = mTvContentTemp.getHeight();
+        LogUtil.d(TAG, "展开高度" + expandHeight);
+        LogUtil.d(TAG, "收起高度" + collapseHeight);
         //此处使用LinearLayout.LayoutParams控制辅助文本控件mTvContentTemp的高度
         final LinearLayout.LayoutParams layoutParams = (LayoutParams) mTvContentTemp.getLayoutParams();
         if (expandHeight <= collapseHeight) {
@@ -434,7 +434,7 @@ public class ExpandableTextView extends LinearLayout {
             spannable.append(appd.toString());
             // 设置样式
             setSpan(spannable, false);
-            Log.d("截取后的字符串:", spannable.toString());
+            LogUtil.d("截取后的字符串:", spannable.toString());
             mTvContentTemp.setText(spannable);
         }
     }
@@ -537,11 +537,17 @@ public class ExpandableTextView extends LinearLayout {
         int height;
         int lines = textView.getLineCount();
         int lineHight = textView.getLineHeight();
+
+        float lineExtra = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            lineExtra = textView.getLineSpacingExtra();
+        }
+        textView.setIncludeFontPadding(false);
         if (textView == mTvContentTemp) {
             if (lines > mLines)
                 lines = mLines;
         }
-        height = lines * lineHight;
+        height = (int) (lines * (lineHight + lineExtra));
         int pt = textView.getPaddingTop();
         int pb = textView.getPaddingBottom();
         height = height + pt + pb;

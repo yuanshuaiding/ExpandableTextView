@@ -8,4 +8,4 @@
     android:textSize="15sp"
     app:collapseLines="3"
     app:tipMarginTop="5dp"
-    app:tipPosition="bottom_end" />
+    app:tipPosition="align_right" />
