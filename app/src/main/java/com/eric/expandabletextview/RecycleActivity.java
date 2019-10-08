@@ -74,6 +74,13 @@ public class RecycleActivity extends AppCompatActivity {
                     maps.put(holder.getAdapterPosition(), expanded ? OPEN : CLOSE);
                 }
             });
+            holder.tv.setExpandableTextViewLongClick(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Toast.makeText(RecycleActivity.this,"长按"+holder.tv.getText(),Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

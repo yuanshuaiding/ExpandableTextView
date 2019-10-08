@@ -276,6 +276,13 @@ public class ExpandableTextView extends LinearLayout {
         }
     }
 
+    public void setExpandableTextViewLongClick(OnLongClickListener longClick) {
+        if (mTvContent != null) {
+            mTvContent.setOnLongClickListener(longClick);
+            mTvContentTemp.setOnLongClickListener(longClick);
+        }
+    }
+
     public CharSequence getText() {
         return mOriginText;
     }
