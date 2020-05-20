@@ -138,6 +138,7 @@ public class ExpandableTextView extends LinearLayout {
                     toggleText();
                 }
             };
+            //默认点击文本也展开折叠,可通过
             mTvContent.setOnClickListener(clickListener);
             mTvContentTemp.setOnClickListener(clickListener);
             mTvExpand.setOnClickListener(clickListener);
@@ -276,6 +277,13 @@ public class ExpandableTextView extends LinearLayout {
         }
     }
 
+    public void setExpandableTextViewClick(View.OnClickListener click) {
+        if (mTvContent != null) {
+            mTvContent.setOnClickListener(click);
+            mTvContentTemp.setOnClickListener(click);
+        }
+    }
+
     public void setExpandableTextViewLongClick(OnLongClickListener longClick) {
         if (mTvContent != null) {
             mTvContent.setOnLongClickListener(longClick);
@@ -301,7 +309,7 @@ public class ExpandableTextView extends LinearLayout {
             formatCollapseText(mOriginText);
         }
         //计算控件高度
-        int expandHeight = getTextViewHeight(mTvContent) + (mPosition == ALIGN_RIGHT ? 2 : 0);//稍微修正一下高度
+        int expandHeight = getTextViewHeight(mTvContent);//稍微修正一下高度
         if (collapseHeight == 0)
             collapseHeight = mTvContentTemp.getHeight();
         LogUtil.d(TAG, "展开高度" + expandHeight);
@@ -543,7 +551,7 @@ public class ExpandableTextView extends LinearLayout {
     private int getTextViewHeight(TextView textView) {
         int height;
         int lines = textView.getLineCount();
-        int lineHight = textView.getLineHeight();
+        float lineHight = (float) ((textView.getTextSize() + 0.00000007) / 0.7535);
 
         float lineExtra = 0;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
