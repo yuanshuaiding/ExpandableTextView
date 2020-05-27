@@ -28,6 +28,8 @@
         <attr name="android:textSize" />
         <!--自定义文字直接使用系统属性-->
         <attr name="android:text" />
+        <!--自定义文字行距使用系统属性-->
+        <attr name="android:lineSpacingExtra" />
         <!--自定义展开折叠控件与顶部间距-->
         <attr name="tipMarginTop" format="dimension" />
     </declare-styleable>

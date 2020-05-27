@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ExpandableTextView</string>
+    <string name="core_team_person_introduce">人员介绍：%s</string>
 </resources>
