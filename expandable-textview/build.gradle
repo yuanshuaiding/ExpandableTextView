@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion Config.minSdkVersion
         targetSdkVersion Config.targetSdkVersion
-        versionCode 124
-        versionName "1.2.4"
+        versionCode 125
+        versionName "1.2.5"
     }
 
     buildTypes {
@@ -25,6 +25,25 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$Config.supportVersion"
+}
+//上传至本地maven仓库
+apply plugin:'maven'
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: 'http://192.168.21.47:8081/repository/maven-releases/') {
+                authentication(userName: 'admin', password: 'pass7899')
+            }
+            pom.project {
+                version android.defaultConfig.versionName
+                artifactId 'expandable-textview'
+                groupId 'com.eric.android.view'
+                packaging 'aar' //填写aar
+                description 'An textview container can expand when over limited lines' //描述
+            }
+        }
+    }
 }
 
 //配置上传Jcenter参数
@@ -45,3 +64,4 @@ publish {
 }
 //也可以直接运行下面的命令自动编译aar并上传到Jcenter
 //gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxxxxxxxxxx -PdryRun=false
+

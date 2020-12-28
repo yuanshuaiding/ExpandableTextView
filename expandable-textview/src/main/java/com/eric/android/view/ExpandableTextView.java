@@ -231,6 +231,10 @@ public class ExpandableTextView extends RelativeLayout {
         initText(text);
     }
 
+    public void setExpandable(boolean expandable) {
+        this.mExpandable = expandable;
+    }
+
     /**
      * 设置展开提示语，在setText方法之前调用
      *
@@ -309,7 +313,7 @@ public class ExpandableTextView extends RelativeLayout {
         } else {
             mTvExpand.setVisibility(VISIBLE);
         }
-        if (!performedByUser) {
+        if (!performedByUser||!mExpandable) {
             mTvContent.setText(mCollapseText);
             mIsExpand = false;
             if (mExpandDrawable != null) {
