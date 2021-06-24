@@ -32,7 +32,7 @@ uploadArchives {
     configuration = configurations.archives
     repositories {
         mavenDeployer {
-            repository(url: 'http://192.168.21.47:8081/repository/maven-releases/') {
+            repository(url: 'http://192.168.21.229:8081/repository/maven-releases/') {
                 authentication(userName: 'admin', password: 'pass7899')
             }
             pom.project {
