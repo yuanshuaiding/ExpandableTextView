@@ -313,7 +313,7 @@ public class ExpandableTextView extends RelativeLayout {
         } else {
             mTvExpand.setVisibility(VISIBLE);
         }
-        if (!performedByUser||!mExpandable) {
+        if (!performedByUser || !mExpandable) {
             mTvContent.setText(mCollapseText);
             mIsExpand = false;
             if (mExpandDrawable != null) {
@@ -325,24 +325,24 @@ public class ExpandableTextView extends RelativeLayout {
         if (mIsExpand) {
             mTvContent.setMaxLines(Integer.MAX_VALUE);
             mTvContent.setText(mExpandText);
-//            if (!mCancelAnim) {
-//                //展开动画
-//                ValueAnimator anim = ValueAnimator.ofInt(mCollapseHeight, mExpandHeight).setDuration(200);
-//                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//                    @Override
-//                    public void onAnimationUpdate(ValueAnimator animation) {
-//                        LayoutParams params = (LayoutParams) mTvContent.getLayoutParams();
-//                        int h = (Integer) animation.getAnimatedValue();
-//                        params.height = h;
-//                        if (h >= mExpandHeight) {
-//                            params.height = LayoutParams.WRAP_CONTENT;
-//                        }
-//                        mTvContent.setLayoutParams(params);
-//                    }
-//
-//                });
-//                anim.start();
-//            }
+            //            if (!mCancelAnim) {
+            //                //展开动画
+            //                ValueAnimator anim = ValueAnimator.ofInt(mCollapseHeight, mExpandHeight).setDuration(200);
+            //                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            //                    @Override
+            //                    public void onAnimationUpdate(ValueAnimator animation) {
+            //                        LayoutParams params = (LayoutParams) mTvContent.getLayoutParams();
+            //                        int h = (Integer) animation.getAnimatedValue();
+            //                        params.height = h;
+            //                        if (h >= mExpandHeight) {
+            //                            params.height = LayoutParams.WRAP_CONTENT;
+            //                        }
+            //                        mTvContent.setLayoutParams(params);
+            //                    }
+            //
+            //                });
+            //                anim.start();
+            //            }
 
             if (mCollapseDrawable != null) {
                 mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, mCollapseDrawable, null);
@@ -356,23 +356,23 @@ public class ExpandableTextView extends RelativeLayout {
         } else {
             mTvContent.setMaxLines(mMaxLines);
             mTvContent.setText(mCollapseText);
-//            if (!mCancelAnim) {
-//                //收起动画
-//                ValueAnimator anim = ValueAnimator.ofInt(mExpandHeight, mCollapseHeight).setDuration(200);
-//                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//                    @Override
-//                    public void onAnimationUpdate(ValueAnimator animation) {
-//                        LayoutParams params = (LayoutParams) mTvContent.getLayoutParams();
-//                        int h = (Integer) animation.getAnimatedValue();
-//                        params.height = h;
-//                        if (h <= mCollapseHeight) {
-//                            params.height = LayoutParams.WRAP_CONTENT;
-//                        }
-//                        mTvContent.setLayoutParams(params);
-//                    }
-//                });
-//                anim.start();
-//            }
+            //            if (!mCancelAnim) {
+            //                //收起动画
+            //                ValueAnimator anim = ValueAnimator.ofInt(mExpandHeight, mCollapseHeight).setDuration(200);
+            //                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            //                    @Override
+            //                    public void onAnimationUpdate(ValueAnimator animation) {
+            //                        LayoutParams params = (LayoutParams) mTvContent.getLayoutParams();
+            //                        int h = (Integer) animation.getAnimatedValue();
+            //                        params.height = h;
+            //                        if (h <= mCollapseHeight) {
+            //                            params.height = LayoutParams.WRAP_CONTENT;
+            //                        }
+            //                        mTvContent.setLayoutParams(params);
+            //                    }
+            //                });
+            //                anim.start();
+            //            }
 
             if (mExpandDrawable != null) {
                 mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, mExpandDrawable, null);
@@ -393,6 +393,7 @@ public class ExpandableTextView extends RelativeLayout {
      * @return 是否超出给定行数
      */
     public boolean formatText(CharSequence text) {
+        if (text == null) text = "";
         TextPaint paint = mTvContent.getPaint();
         StaticLayout staticLayout = new StaticLayout(text, paint, mTextTotalWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, mLineSpaceExtra, false);
         int lineCount = staticLayout.getLineCount();
